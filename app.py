@@ -500,54 +500,35 @@ def index():
         </div>
         
         <!-- Card 2: Social Media -->
-        <div class="card">
-            <div class="card-header">
-                <h2>🌐 SOCIAL MEDIA INTELLIGENCE</h2>
-                <span>7 NEW</span>
-            </div>
-            <div class="card-body">
-                <div id="socialFeed">
-                    {''.join([f'''
-                    <div class="social-post">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
-                            <span>{p['platform']}</span>
-                            <span class="threat-critical">{p['threat_level'].upper()}</span>
-                        </div>
-                        <div style="margin-bottom:0.5rem;">@{p['username']}</div>
-                        <div style="margin-bottom:0.5rem;">"{p['text']}"</div>
-                        <div style="font-size:0.8rem; color:#94a3b8;">{p['time']} · {p['location']}</div>
-                    </div>
-                    ''' for p in social_posts[:3]])}}
-                </div>
+<div id="socialFeed">
+    {''.join([f'''
+    <div class="social-post">
+        <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+            <span>{p['platform']}</span>
+            <span class="threat-critical">{p['threat_level'].upper()}</span>
+        </div>
+        <div style="margin-bottom:0.5rem;">@{p['username']}</div>
+        <div style="margin-bottom:0.5rem;">"{p['text']}"</div>
+        <div style="font-size:0.8rem; color:#94a3b8;">{p['time']} · {p['location']}</div>
+    </div>
+    ''' for p in social_posts[:3]])}
+</div>
             </div>
         </div>
         
         <!-- Card 3: Tips -->
-        <div class="card">
-            <div class="card-header">
-                <h2>💬 ANONYMOUS TIPS</h2>
-                <span>LIVE</span>
-            </div>
-            <div class="card-body">
-                <div style="background:#0f172a; padding:1rem; border-radius:0.5rem; margin-bottom:1rem;">
-                    <input type="text" id="tipLocation" placeholder="📍 Location" style="width:100%; padding:0.75rem; background:#1e293b; border:1px solid #334155; color:white; border-radius:0.5rem; margin-bottom:0.5rem;">
-                    <textarea id="tipText" placeholder="📝 Tip details" rows="2" style="width:100%; padding:0.75rem; background:#1e293b; border:1px solid #334155; color:white; border-radius:0.5rem; margin-bottom:0.5rem;"></textarea>
-                    <button onclick="submitTip()" style="width:100%; padding:0.75rem; background:#ef4444; border:none; color:white; border-radius:0.5rem; cursor:pointer;">
-                        SUBMIT TIP
-                    </button>
-                </div>
-                <div id="tipsList">
-                    {''.join([f'''
-                    <div class="tip-item tip-priority-high">
-                        <div style="display:flex; justify-content:space-between;">
-                            <span><strong>📍 {t['location']}</strong></span>
-                            <span style="color:#ef4444;">{t['priority']}</span>
-                        </div>
-                        <div style="margin:0.5rem 0;">"{t['text']}"</div>
-                        <div style="font-size:0.8rem; color:#94a3b8;">{t['time']} · {t['status']}</div>
-                    </div>
-                    ''' for t in tips])}}
-                </div>
+<div id="tipsList">
+    {''.join([f'''
+    <div class="tip-item tip-priority-high">
+        <div style="display:flex; justify-content:space-between;">
+            <span><strong>📍 {t['location']}</strong></span>
+            <span style="color:#ef4444;">{t['priority']}</span>
+        </div>
+        <div style="margin:0.5rem 0;">"{t['text']}"</div>
+        <div style="font-size:0.8rem; color:#94a3b8;">{t['time']} · {t['status']}</div>
+    </div>
+    ''' for t in tips])}
+</div>
             </div>
         </div>
         
