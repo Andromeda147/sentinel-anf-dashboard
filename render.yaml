@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: sentinel-anf-dashboard
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: SECRET_KEY
+        value: anf-secure-key-2026-change-this
