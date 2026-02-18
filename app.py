@@ -379,6 +379,22 @@ def index():
         
         .tip-priority-high {{ border-left-color: #ef4444; }}
         
+        /* Camera Card Specific Styles */
+        @keyframes pulse {{
+            0% {{ opacity: 1; transform: scale(1); }}
+            50% {{ opacity: 0.5; transform: scale(1.1); }}
+            100% {{ opacity: 1; transform: scale(1); }}
+        }}
+        
+        .camera-thumb {{
+            transition: all 0.2s ease;
+        }}
+        
+        .camera-thumb:hover {{
+            transform: translateY(-2px);
+            box-shadow: 0 8px 12px rgba(239, 68, 68, 0.2);
+        }}
+        
         @media (max-width: 1200px) {{
             .dashboard {{ grid-template-columns: repeat(2, 1fr); }}
         }}
@@ -472,7 +488,120 @@ def index():
             </div>
         </div>
         
-        <!-- Card 4: Recent Seizures -->
+        <!-- Card 4: Live Camera Surveillance (NEW) -->
+        <div class="card">
+            <div class="card-header">
+                <h2>📹 LIVE CAMERA SURVEILLANCE</h2>
+                <span>4 FEEDS</span>
+            </div>
+            <div class="card-body">
+                <!-- Main Camera Display -->
+                <div id="mainCameraContainer" style="position: relative; width: 100%; height: 240px; background: #0f172a; border-radius: 0.5rem; overflow: hidden; border: 2px solid #ef4444; margin-bottom: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                    <img id="mainCameraFeed" src="https://raw.githubusercontent.com/Andromeda147/sentinel-anf-dashboard/main/images/camera1.jpg" 
+                         alt="Live Camera Feed" 
+                         style="width: 100%; height: 100%; object-fit: cover;">
+                    
+                    <!-- Live Badge -->
+                    <div style="position: absolute; top: 12px; left: 12px; background: rgba(239, 68, 68, 0.95); color: white; padding: 6px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+                        <span style="width: 10px; height: 10px; background: white; border-radius: 50%; animation: pulse 1.2s infinite;"></span>
+                        LIVE STREAM
+                    </div>
+                    
+                    <!-- Camera Info -->
+                    <div id="cameraInfo" style="position: absolute; bottom: 12px; left: 12px; background: rgba(15, 23, 42, 0.9); color: white; padding: 8px 16px; border-radius: 30px; font-size: 0.85rem; font-weight: 500; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+                        📍 F-10 Markaz · CAM 01 · 14:23:45
+                    </div>
+                    
+                    <!-- Motion Alert -->
+                    <div style="position: absolute; top: 12px; right: 12px; background: rgba(239, 68, 68, 0.95); color: white; padding: 6px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+                        <span>⚠️</span> MOTION DETECTED
+                    </div>
+                    
+                    <!-- Timestamp -->
+                    <div style="position: absolute; bottom: 12px; right: 12px; background: rgba(15, 23, 42, 0.9); color: #94a3b8; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1);">
+                        2026-02-18 14:23:45
+                    </div>
+                </div>
+                
+                <!-- Camera Selection Grid -->
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-bottom: 1.25rem;">
+                    <div class="camera-thumb" onclick="switchCamera(1)" data-cam="1" style="background: linear-gradient(145deg, #ef4444, #dc2626); padding: 0.85rem 0.25rem; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid rgba(239, 68, 68, 0.5); box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.2s;">
+                        <div style="font-size: 0.7rem; color: rgba(255,255,255,0.9); letter-spacing: 0.5px;">CAM 01</div>
+                        <div style="font-size: 1rem; font-weight: 700; color: white; margin: 4px 0;">F-10</div>
+                        <div style="color: white; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                            <span style="width: 8px; height: 8px; background: white; border-radius: 50%; animation: pulse 1.2s infinite;"></span> LIVE
+                        </div>
+                    </div>
+                    <div class="camera-thumb" onclick="switchCamera(2)" data-cam="2" style="background: #1e293b; padding: 0.85rem 0.25rem; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid #334155; transition: all 0.2s;">
+                        <div style="font-size: 0.7rem; color: #94a3b8; letter-spacing: 0.5px;">CAM 02</div>
+                        <div style="font-size: 1rem; font-weight: 700; color: white; margin: 4px 0;">I-8</div>
+                        <div style="color: #94a3b8; font-size: 0.7rem;">⏸️ STANDBY</div>
+                    </div>
+                    <div class="camera-thumb" onclick="switchCamera(3)" data-cam="3" style="background: #1e293b; padding: 0.85rem 0.25rem; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid #334155; transition: all 0.2s;">
+                        <div style="font-size: 0.7rem; color: #94a3b8; letter-spacing: 0.5px;">CAM 03</div>
+                        <div style="font-size: 1rem; font-weight: 700; color: white; margin: 4px 0;">G-9</div>
+                        <div style="color: #94a3b8; font-size: 0.7rem;">⏸️ STANDBY</div>
+                    </div>
+                    <div class="camera-thumb" onclick="switchCamera(4)" data-cam="4" style="background: #1e293b; padding: 0.85rem 0.25rem; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid #334155; transition: all 0.2s;">
+                        <div style="font-size: 0.7rem; color: #94a3b8; letter-spacing: 0.5px;">CAM 04</div>
+                        <div style="font-size: 1rem; font-weight: 700; color: white; margin: 4px 0;">AIRPORT</div>
+                        <div style="color: #94a3b8; font-size: 0.7rem;">⏸️ STANDBY</div>
+                    </div>
+                </div>
+                
+                <!-- AI Detection Stats -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                    <div style="background: linear-gradient(145deg, #0f172a, #0a0f1a); padding: 1rem; border-radius: 12px; text-align: center; border: 1px solid #334155;">
+                        <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">AI DETECTION</div>
+                        <div style="font-size: 1.4rem; font-weight: 700; color: #ef4444; line-height: 1.2;">2 · 1</div>
+                        <div style="font-size: 0.8rem; color: #e2e8f0;">Persons · Vehicle</div>
+                        <div style="font-size: 0.7rem; color: #4ade80; margin-top: 6px; background: rgba(74, 222, 128, 0.1); padding: 4px; border-radius: 20px;">confidence 94%</div>
+                    </div>
+                    <div style="background: linear-gradient(145deg, #0f172a, #0a0f1a); padding: 1rem; border-radius: 12px; text-align: center; border: 1px solid #334155;">
+                        <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">LAST ALERT</div>
+                        <div style="font-size: 1.4rem; font-weight: 700; color: #f59e0b;">3 min</div>
+                        <div style="font-size: 0.8rem; color: #e2e8f0;">suspicious exchange</div>
+                        <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 6px;">CAM 01 · F-10</div>
+                    </div>
+                </div>
+                
+                <!-- Alert History -->
+                <div style="background: linear-gradient(145deg, #0f172a, #0a0f1a); padding: 1rem; border-radius: 12px; border: 1px solid #334155;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; color: #94a3b8; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0 0.25rem;">
+                        <span>⏱️ TIME</span>
+                        <span>📍 LOCATION</span>
+                        <span>⚠️ EVENT</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 0.6rem 0.25rem; border-bottom: 1px solid #334155; font-size: 0.85rem;">
+                        <span>14:23:45</span>
+                        <span>F-10</span>
+                        <span style="color: #ef4444; font-weight: 500;">motion detected</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 0.6rem 0.25rem; border-bottom: 1px solid #334155; font-size: 0.85rem;">
+                        <span>14:18:22</span>
+                        <span>F-10</span>
+                        <span style="color: #ef4444; font-weight: 500;">person loitering</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 0.6rem 0.25rem; border-bottom: 1px solid #334155; font-size: 0.85rem;">
+                        <span>14:12:07</span>
+                        <span>F-10</span>
+                        <span style="color: #f59e0b;">vehicle stopped</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 0.6rem 0.25rem; font-size: 0.85rem;">
+                        <span>14:03:52</span>
+                        <span>I-8</span>
+                        <span style="color: #3b82f6;">crowd gathering</span>
+                    </div>
+                </div>
+                
+                <!-- Integration Note -->
+                <div style="margin-top: 1rem; font-size: 0.8rem; color: #94a3b8; text-align: center; padding: 0.75rem; background: rgba(15, 23, 42, 0.7); border-radius: 30px; border: 1px dashed #334155;">
+                    <span style="color: #ef4444;">⚡</span> After approval: Integration with Safe City Islamabad cameras for real-time AI surveillance
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 5: Recent Seizures -->
         <div class="card">
             <div class="card-header">
                 <h2>📋 RECENT SEIZURES</h2>
@@ -486,7 +615,7 @@ def index():
             </div>
         </div>
         
-        <!-- Card 5: Network Analysis -->
+        <!-- Card 6: Network Analysis -->
         <div class="card">
             <div class="card-header">
                 <h2>🔗 NETWORK INTELLIGENCE</h2>
@@ -506,7 +635,7 @@ def index():
             </div>
         </div>
         
-        <!-- Card 6: Drug Recognition -->
+        <!-- Card 7: Drug Recognition -->
         <div class="card">
             <div class="card-header">
                 <h2>💊 DRUG RECOGNITION</h2>
@@ -570,6 +699,55 @@ def index():
                 location.reload();
             }});
         }}
+        
+        // Camera switching function
+        function switchCamera(camId) {{
+            const images = {{
+                1: "https://raw.githubusercontent.com/Andromeda147/sentinel-anf-dashboard/main/images/camera1.jpg",
+                2: "https://raw.githubusercontent.com/Andromeda147/sentinel-anf-dashboard/main/images/camera2.jpg",
+                3: "https://raw.githubusercontent.com/Andromeda147/sentinel-anf-dashboard/main/images/camera3.jpg",
+                4: "https://raw.githubusercontent.com/Andromeda147/sentinel-anf-dashboard/main/images/camera4.jpg"
+            }};
+            
+            const locations = {{
+                1: "F-10 Markaz · CAM 01",
+                2: "I-8 Hostel Area · CAM 02",
+                3: "G-9 China Chowk · CAM 03",
+                4: "Islamabad Airport · CAM 04"
+            }};
+            
+            // Update main image and info
+            document.getElementById('mainCameraFeed').src = images[camId];
+            document.getElementById('cameraInfo').innerHTML = `📍 ${{locations[camId]}} · ${{new Date().toLocaleTimeString()}}`;
+            
+            // Reset all camera thumbnails to inactive state
+            const thumbnails = document.querySelectorAll('.camera-thumb');
+            thumbnails.forEach((thumb, index) => {{
+                if (index === camId - 1) {{
+                    thumb.style.background = 'linear-gradient(145deg, #ef4444, #dc2626)';
+                    thumb.style.border = '1px solid rgba(239, 68, 68, 0.5)';
+                    thumb.querySelector('div:first-child').style.color = 'rgba(255,255,255,0.9)';
+                    thumb.querySelector('div:last-child').innerHTML = '<span style="width:8px;height:8px;background:white;border-radius:50%;animation:pulse 1.2s infinite;display:inline-block;margin-right:4px;"></span> LIVE';
+                    thumb.querySelector('div:last-child').style.color = 'white';
+                }} else {{
+                    thumb.style.background = '#1e293b';
+                    thumb.style.border = '1px solid #334155';
+                    thumb.querySelector('div:first-child').style.color = '#94a3b8';
+                    thumb.querySelector('div:last-child').innerHTML = '⏸️ STANDBY';
+                    thumb.querySelector('div:last-child').style.color = '#94a3b8';
+                }}
+            }});
+        }}
+        
+        // Auto-refresh camera timestamp
+        setInterval(() => {{
+            const cameraInfo = document.getElementById('cameraInfo');
+            if (cameraInfo) {{
+                const currentText = cameraInfo.innerHTML;
+                const newTime = new Date().toLocaleTimeString();
+                cameraInfo.innerHTML = currentText.replace(/\d{{2}}:\d{{2}}:\d{{2}}/, newTime);
+            }}
+        }}, 1000);
     </script>
 </body>
 </html>
